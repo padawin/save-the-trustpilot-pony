@@ -1,4 +1,5 @@
 import pygame
+import time
 
 import config
 from exceptions import InvalidMazeDataError, InvalidConfigError
@@ -15,6 +16,8 @@ class PlayScene(Scene):
             "end-point": pygame.image.load(config.END_IMAGE)
         }
         self._direction = None
+        self._result = None
+        self._time_result = time.time()
         try:
             self._maze_id = TrustPilot.create_maze(config.MAZE_INFO)
         except InvalidMazeDataError:
@@ -40,9 +43,14 @@ class PlayScene(Scene):
 
     def update(self):
         if self._direction is not None:
-            TrustPilot.move(self._maze_id, self._direction)
+            self._result = TrustPilot.move(self._maze_id, self._direction)
+            self._time_result = time.time() + config.TIME_DISPLAY_MESSAGE
             self._update_maze()
             self._direction = None
+            return True
+        if self._time_result is not None and self._time_result < time.time():
+            self._time_result = None
+            self._result = None
             return True
         return False
 
@@ -98,6 +106,9 @@ class PlayScene(Scene):
         self._render_maze(maze_surface)
         for actor in ("pony", "domokun", "end-point"):
             self._render_actor(maze_surface, actor)
+
+        if self._result:
+            self._render_result(maze_surface)
         screen.blit(
             pygame.transform.scale(maze_surface, config.WINDOW_SIZE),
             (0, 0)
@@ -130,3 +141,20 @@ class PlayScene(Scene):
                     cell_height * (actor_index // maze_width)
                 )
             )
+
+    def _render_result(self, maze_surface):
+        font = pygame.font.Font('fonts/Rainbowbitch2.ttf', 80)
+        txt_surface, txt_rect = self._text_objects(
+            self._result, font, (0, 0, 0)
+        )
+        bg_surface = pygame.Surface((txt_rect.w, txt_rect.h))
+        bg_surface.fill((221, 44, 228))
+        txt_rect.center = (
+            txt_rect.w / 2, txt_rect.h / 2
+        )
+        bg_surface.blit(txt_surface, txt_rect)
+        txt_rect.center = (
+            txt_rect.w / 2,
+            30
+        )
+        maze_surface.blit(bg_surface, txt_rect)

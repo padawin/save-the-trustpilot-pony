@@ -11,3 +11,4 @@ IMAGE_PATTERN = "images/tile-{}.png"
 PONY_IMAGE = "images/pony.png"
 DOMOKUN_IMAGE = "images/domokun.png"
 END_IMAGE = "images/end.png"
+TIME_DISPLAY_MESSAGE = 3
