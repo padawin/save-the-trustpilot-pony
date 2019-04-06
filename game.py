@@ -21,7 +21,7 @@ class Game:
                 return
             else:
                 self._scene.handle_event(event)
-        self._scene.update(self)
+        self._needs_redraw = self._scene.update()
 
     def render(self, screen):
         if self._needs_redraw:

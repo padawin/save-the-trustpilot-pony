@@ -14,6 +14,7 @@ class PlayScene(Scene):
             "domokun": pygame.image.load(config.DOMOKUN_IMAGE),
             "end-point": pygame.image.load(config.END_IMAGE)
         }
+        self._direction = None
         try:
             self._maze_id = TrustPilot.create_maze(config.MAZE_INFO)
         except InvalidMazeDataError:
@@ -24,6 +25,26 @@ class PlayScene(Scene):
 
     def _update_maze(self):
         self._maze_data = TrustPilot.get_maze(self._maze_id)
+        self._needs_redraw = True
+
+    def handle_event(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                self._direction = "north"
+            elif event.key == pygame.K_RIGHT:
+                self._direction = "east"
+            elif event.key == pygame.K_DOWN:
+                self._direction = "south"
+            elif event.key == pygame.K_LEFT:
+                self._direction = "west"
+
+    def update(self):
+        if self._direction is not None:
+            TrustPilot.move(self._maze_id, self._direction)
+            self._update_maze()
+            self._direction = None
+            return True
+        return False
 
     def _get_walls(self, cell_index):
         walls = self._maze_data["data"][cell_index]
