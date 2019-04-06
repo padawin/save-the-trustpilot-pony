@@ -9,9 +9,11 @@ if __name__ == "__main__":
     pygame.init()
 
     screen = pygame.display.set_mode(config.WINDOW_SIZE)
+    clock = pygame.time.Clock()
 
     game = Game()
     game.set_scene(PlayScene())
     while not game.finished():
         game.update()
         game.render()
+        clock.tick(60)
