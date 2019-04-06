@@ -31,3 +31,12 @@ class TrustPilot:
             raise InvalidMazeDataError()
         else:
             raise MazeCreationError(response.status_code)
+
+    @classmethod
+    def get_maze(cls, maze_id):
+        url = cls.base_url.format(path=f"maze/{maze_id}")
+        response = requests.get(url, headers=cls._get_headers())
+        if response.status_code == 200:
+            return response.json()
+        elif response.status_code == 404:
+            raise InvalidMazeDataError()
