@@ -5,5 +5,5 @@ class Scene:
     def update(self, game):
         pass
 
-    def render(self):
+    def render(self, screen):
         pass

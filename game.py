@@ -22,8 +22,9 @@ class Game:
                 self._scene.handle_event(event)
         self._scene.update(self)
 
-    def render(self):
-        self._scene.render()
+    def render(self, screen):
+        self._scene.render(screen)
+        pygame.display.update()
 
     def finished(self):
         return not self._continue

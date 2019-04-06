@@ -15,5 +15,5 @@ if __name__ == "__main__":
     game.set_scene(PlayScene())
     while not game.finished():
         game.update()
-        game.render()
+        game.render(screen)
         clock.tick(60)
