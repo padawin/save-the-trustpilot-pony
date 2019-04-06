@@ -8,14 +8,7 @@ from game import Game
 if __name__ == "__main__":
     pygame.init()
 
-    screen = pygame.display.set_mode(
-        [
-            map_coord * pixels
-            for map_coord, pixels in zip(
-                config.MAZE_SIZE, config.CELL_PIXELS_SIZE
-            )
-        ]
-    )
+    screen = pygame.display.set_mode(config.WINDOW_SIZE)
 
     game = Game()
     game.set_scene(Scene())
