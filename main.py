@@ -1,7 +1,7 @@
 import pygame
 
 import config
-from scenes.scene import Scene
+from scenes.play import PlayScene
 from game import Game
 
 
@@ -11,7 +11,7 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode(config.WINDOW_SIZE)
 
     game = Game()
-    game.set_scene(Scene())
+    game.set_scene(PlayScene())
     while not game.finished():
         game.update()
         game.render()
