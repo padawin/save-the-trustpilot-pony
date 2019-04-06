@@ -5,6 +5,7 @@ class Game:
     def __init__(self):
         self._scene = None
         self._continue = True
+        self._needs_redraw = True
 
     def set_scene(self, scene):
         self._scene = scene
@@ -23,8 +24,10 @@ class Game:
         self._scene.update(self)
 
     def render(self, screen):
-        self._scene.render(screen)
-        pygame.display.update()
+        if self._needs_redraw:
+            self._scene.render(screen)
+            pygame.display.update()
+            self._needs_redraw = False
 
     def finished(self):
         return not self._continue
