@@ -18,6 +18,8 @@ To install the dependancies, run (preferably in a virtualenv):
 
 Use the **arrow keys** to navigate through the maze and the **escape** key to exit.
 
+Some settings can be adjusted in the file `config.py`.
+
 ## Screenshot
 
 ![screenshot](./screenshots/screenshot.png "The labyrinth")
