@@ -4,6 +4,8 @@ import config
 from scenes.play import PlayScene
 from game import Game
 
+from exceptions import InvalidConfigError
+
 
 if __name__ == "__main__":
     pygame.init()
@@ -12,8 +14,12 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
 
     game = Game()
-    game.set_scene(PlayScene())
-    while not game.finished():
-        game.update()
-        game.render(screen)
-        clock.tick(60)
+    try:
+        game.set_scene(PlayScene())
+    except InvalidConfigError as e:
+        print(e)
+    else:
+        while not game.finished():
+            game.update()
+            game.render(screen)
+            clock.tick(60)
