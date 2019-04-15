@@ -20,8 +20,8 @@ class PlayScene(Scene):
         self._time_result = time.time()
         try:
             self._maze_id = TrustPilot.create_maze(config.MAZE_INFO)
-        except InvalidMazeDataError:
-            raise InvalidConfigError()
+        except InvalidMazeDataError as e:
+            raise InvalidConfigError(e)
         else:
             self._maze_data = None
             self._update_maze()

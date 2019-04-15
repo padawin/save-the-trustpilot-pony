@@ -28,7 +28,7 @@ class TrustPilot:
         if response.status_code == 200:
             return response.json()["maze_id"]
         elif response.status_code == 400:
-            raise InvalidMazeDataError()
+            raise InvalidMazeDataError(response.text)
         else:
             raise MazeCreationError(response.status_code)
 

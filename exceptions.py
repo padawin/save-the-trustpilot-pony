@@ -8,5 +8,5 @@ class InvalidMazeDataError(Exception):
 
 
 class InvalidConfigError(Exception):
-    def __init__(self):
-        super().__init__("Stop messing around with the configuration")
+    def __init__(self, e):
+        super().__init__(f"Stop messing around with the configuration: {e}")
