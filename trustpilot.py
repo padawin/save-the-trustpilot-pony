@@ -8,6 +8,10 @@ logger = logging.getLogger(__name__)
 
 
 class TrustPilot:
+    """
+    Interface to TrustPilot's API.
+    """
+
     base_url = "https://ponychallenge.trustpilot.com/pony-challenge/{path}"
 
     @staticmethod
@@ -19,6 +23,12 @@ class TrustPilot:
 
     @classmethod
     def create_maze(cls, maze_info):
+        """
+        Create a labyrinth.
+
+        :raises: `InvalidMazeDataError` if the data provided are invalid.
+        :raises: `MazeCreationError` if an unexpected error occured.
+        """
         url = cls.base_url.format(path="maze")
         response = requests.post(
             url,
@@ -34,6 +44,13 @@ class TrustPilot:
 
     @classmethod
     def get_maze(cls, maze_id):
+        """
+        Get a labyrinth based on an ID.
+
+        :param maze_id: `str`; The labyrinth's ID
+        :raises: `InvalidMazeDataError` if the ID is invalid
+        :return: the labyrinth's content
+        """
         url = cls.base_url.format(path=f"maze/{maze_id}")
         response = requests.get(url, headers=cls._get_headers())
         if response.status_code == 200:
@@ -43,6 +60,11 @@ class TrustPilot:
 
     @classmethod
     def move(cls, maze_id, direction):
+        """
+        Make the pony move in the labyrinth in the given direction.
+
+        :return: `str` the result of the move.
+        """
         url = cls.base_url.format(path=f"maze/{maze_id}")
         response = requests.post(
             url,

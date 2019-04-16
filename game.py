@@ -2,6 +2,10 @@ import pygame
 
 
 class Game:
+    """
+    Class managing the scenes and their update.
+    """
+
     def __init__(self):
         self._scene = None
         self._continue = True
@@ -11,6 +15,12 @@ class Game:
         self._scene = scene
 
     def update(self):
+        """
+        Handle the events, then update the current scene.
+
+        Capture any event from Pygame. If there are any, the scene is asked to
+        handle them. Then the scene is updated.
+        """
         for event in pygame.event.get():
             if (
                 event.type == pygame.QUIT
@@ -24,6 +34,11 @@ class Game:
         self._needs_redraw = self._scene.update()
 
     def render(self, screen):
+        """
+        Render the scene if it needs rendering.
+
+        If the scene has not been updated, no rendering is needed.
+        """
         if self._needs_redraw:
             self._scene.render(screen)
             pygame.display.update()

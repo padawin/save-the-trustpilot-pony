@@ -9,6 +9,13 @@ from trustpilot import TrustPilot
 
 
 class PlayScene(Scene):
+    """
+    Main scene of the application.
+
+    It is the scene where the labyrinth is displayed, and where the user can
+    play.
+    """
+
     def __init__(self):
         self._images_cache = {
             "pony": pygame.image.load(config.PONY_IMAGE),
@@ -27,6 +34,9 @@ class PlayScene(Scene):
             self._update_maze()
 
     def _update_maze(self):
+        """
+        Defines the labyrinth based on data fetched from TrustPilot.
+        """
         self._maze_data = TrustPilot.get_maze(self._maze_id)
         self._needs_redraw = True
 
@@ -42,6 +52,14 @@ class PlayScene(Scene):
                 self._direction = "west"
 
     def update(self):
+        """
+        Update the scene's state.
+
+        Make the pony move and hide the move result message if it has been
+        displayed long enough.
+
+        :return: `bool`; `True` if something has been updated.
+        """
         if self._direction is not None:
             self._result = TrustPilot.move(self._maze_id, self._direction)
             self._time_result = time.time() + config.TIME_DISPLAY_MESSAGE
@@ -55,6 +73,15 @@ class PlayScene(Scene):
         return False
 
     def _get_walls(self, cell_index):
+        """
+        Return a list of directions where there is a wall, for a given cell.
+
+        As each cell contains only the information about the north and east
+        walls, this method analyses the west and south neighbours to know if
+        there is a wall between them and the current cell.
+
+        :return: `list` of `str`. The `str` are cardinal points.
+        """
         walls = self._maze_data["data"][cell_index]
         maze_width = self._maze_data["size"][0]
         try:
@@ -76,6 +103,19 @@ class PlayScene(Scene):
         return walls
 
     def _get_cell_image(self, sides):
+        """
+        Fun part, transform a list of direction into an image name.
+
+        Each direction is associated with a bit.
+        A result is initialised to 0 and for each side having a wall for the
+        provided cell's sides, the matching bit is set to 1.
+
+        giving a number from 0 (no wall) to 15 (0b1111, walls on both sides),
+        based on which the image path is returned.
+
+        :see: @config.IMAGE_PATTERN
+        :return: `str`; an image path
+        """
         flags = {
             "west": 0x1,
             "south": 0x2,
@@ -96,6 +136,12 @@ class PlayScene(Scene):
             return image
 
     def render(self, screen):
+        """
+        Render the labyrinth.
+
+        It first renders the walls, then renders the actors (Pony, Domokun and
+        flag).
+        """
         maze_width = self._maze_data["size"][0]
         maze_height = self._maze_data["size"][1]
         cell_width = config.CELL_PIXELS_SIZE[0]
@@ -143,6 +189,9 @@ class PlayScene(Scene):
             )
 
     def _render_result(self, maze_surface):
+        """
+        Render a move result using an amazing font.
+        """
         font = pygame.font.Font('fonts/Rainbowbitch2.ttf', 80)
         txt_surface, txt_rect = self._text_objects(
             self._result, font, (0, 0, 0)
